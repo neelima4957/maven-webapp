@@ -1,5 +1,24 @@
-java-maven-app
- ├── pom.xml
- └── src
-      └── main
-           └── java
+pipeline {
+    agent any
+
+    tools {
+        maven 'maven'
+    }
+
+    stages {
+
+        stage('Clone Code') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/neelima4957/maven-webapp.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+    }
+}
