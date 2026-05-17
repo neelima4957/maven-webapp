@@ -2,15 +2,14 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven'
+        maven 'Maven'
     }
 
     stages {
 
-        stage('Clone Code') {
+        stage('Git Checkout') {
             steps {
-                git branch: 'main',
-                url: 'https://github.com/neelima4957/maven-webapp.git'
+                git 'https://github.com/username/mywebapp.git'
             }
         }
 
@@ -20,5 +19,18 @@ pipeline {
             }
         }
 
+        stage('Deploy WAR') {
+            steps {
+                deploy adapters: [
+                    tomcat9(
+                        credentialsId: 'tomcat',
+                        path: '',
+                        url: 'http://<EC2-PUBLIC-IP>:9090/'
+                    )
+                ],
+                contextPath: 'mywebapp',
+                war: '**/*.war'
+            }
+        }
     }
 }
